@@ -148,45 +148,30 @@
           var lenS= [len1,len2,len3,len4,len5,len6,len7,len8,len9,len10,len11,len12,len13,len14];
           var result = [];
           
-         submit = function() {
+            submit = function() {
             wordMin = document.querySelector("#mini").value;
             wordMax = document.querySelector("#max").value;
             Length = document.querySelector("#maxLength").value;
             simple = document.querySelector("#easy").checked;
             replace = document.querySelector("#sub").checked;
 
-             if(replace==true){
-                
-                 sub();
+            if(wordMax<wordMin){
+                alert("word Maximum and word Minimum conflicts");
+            }
+             lengthList();   
+
+             for(var x = 1;x<11;x++){
+
+                 if(simple == true){
+                    generateSimple();
+                 }
+                 if(simple == false){
+                     generate();
+                 }
+                 document.getElementById("r"+x).innerHTML = result[x-1].join(" ");
              }
-             if(replace==false){
-        
-                 reverseSub();
-             }
-           
-             lengthList();
-             generate();         
-             
+
             
-             document.getElementById("r1").innerHTML = result[0].join(" ");
-             generate();
-             document.getElementById("r2").innerHTML = result[1].join(" ");
-             generate();
-             document.getElementById("r3").innerHTML = result[2].join(" ");
-             generate();
-             document.getElementById("r4").innerHTML = result[3].join(" ");
-             generate();
-             document.getElementById("r5").innerHTML = result[4].join(" ");
-             generate();
-             document.getElementById("r6").innerHTML = result[5].join(" ");
-             generate();
-             document.getElementById("r7").innerHTML = result[6].join(" ");
-             generate();
-             document.getElementById("r8").innerHTML = result[7].join(" ");
-             generate();
-             document.getElementById("r9").innerHTML = result[8].join(" ");
-             generate();
-             document.getElementById("r10").innerHTML = result[9].join(" ");
              result = [];
                
              }
@@ -195,73 +180,75 @@
   
          
         function getRandom(min, max) {
-            return Math.floor(Math.random() * (max - min+1) + min);
+            return Math.floor(Math.random() * max) + min;
         }        
          
-          easy = function(){
-              result=[];
+       
+          
+          
+        generateSimple = function(){
+
              var tempW;
              var passw =[];
              var ran;
+            var tempRan;
              var d = Math.floor(Length/4);
-             if (d<wordMax){
-                 wordMax = d;
-             }
- 
-             for(i=0;i<4;i++){
-                var temRan = getRandom(1,3);
+            if (d<wordMax){
+               wordMax = d;
+            }
+             for(i=0;i<4;i++){           
+          
                  
-                tempW = lenS[temRan]
-                [getRandom(0,lenS[temRan].length)];
-
-                 while (tempW == undefined){
-                    tempW = lenS[temRan]
-                    [getRandom(0,lenS[temRan].length)];
-                 }
-              
+                tempW = lenS[1]
+                [getRandom(0,lenS[1].length)];
+                
                 passw.push(tempW);
                  
-                var tempLength = tempLength - tempW.length;
-                 
-                if(tempLength< 0){
-                    passw.pop();
-                    i--;
-                }
-                 
              }
-               
+            
+             if(replace == true){
+                 for(j = 0; j<4;j++){
+                     passw[j] = passw[j] .replace(/i/g, "1");
+                     passw[j]  = passw[j] .replace(/I/g, "1");
+                     passw[j]  = passw[j] .replace(/e/g, "3");
+                     passw[j]  = passw[j] .replace(/o/g, "0");
+                 }
+             }
+ 
              result.push(passw);
-              
-          }
-          
-          
-          
+         }      
           
        
-           generate = function(){
-
+        generate = function(){
+            if(Length<4*wordMin){
+                alert("word minimum length and maximum length conflicts.");
+                
+            }
+            else{
+             var tempLength = Length;
              var tempW;
              var passw =[];
              var ran;
+             var tempRan;
              var d = Math.floor(Length/4);
-             if (d<wordMax){
-                 wordMax = d;
-             }
+            if (d<wordMax){
+               wordMax = d;
+            }
  
-             for(i=0;i<4;i++){
-                var temRan = getRandom(wordMin,wordMax);
+             for(i=0;i<4;i++){           
+                tempRan = Math.round(Math.random() * wordMax + wordMin);
+                while (tempRan<wordMin){
+                    tempRan++;
+                }
+     
+                
                  
-                tempW = lenS[temRan]
-                [getRandom(0,lenS[temRan].length)];
-
-                 while (tempW == undefined){
-                    tempW = lenS[temRan]
-                    [getRandom(0,lenS[temRan].length)];
-                 }
-              
+                tempW = lenS[tempRan-1]
+                [getRandom(0,lenS[tempRan-1].length)];
+                
                 passw.push(tempW);
                  
-                var tempLength = tempLength - tempW.length;
+                tempLength = tempLength - tempW.length;
                  
                 if(tempLength< 0){
                     passw.pop();
@@ -269,9 +256,17 @@
                 }
                  
              }
-               
-             result.push(passw);
+             if(replace == true){
+                 for(j = 0; j<4;j++){
+                     passw[j] = passw[j] .replace(/i/g, "1");
+                     passw[j]  = passw[j] .replace(/I/g, "1");
+                     passw[j]  = passw[j] .replace(/e/g, "3");
+                     passw[j]  = passw[j] .replace(/o/g, "0");
+                 }
+             }
  
+             result.push(passw);
+            }
          }
            
          
@@ -323,26 +318,7 @@
 
              }
          }    
-         
-         sub = function(){
 
-             for(i = 0;i<1000;i++){
-             list[i]=list[i].replace(/i/g, "1");
-            list[i]=list[i].replace(/I/g, "1");
-             list[i]=list[i].replace(/e/g, "3");
-             list[i]=list[i].replace(/o/g, "0");
-             }
-             
-         }
-          reverseSub = function(){
-
-             for(i = 0;i<1000;i++){
-             list[i]=list[i].replace(/1/g, "i");    
-             list[i]=list[i].replace(/3/g, "e");
-             list[i]=list[i].replace(/0/g, "o");
-             }
-             
-         }
      
 var list=[
     "a",
